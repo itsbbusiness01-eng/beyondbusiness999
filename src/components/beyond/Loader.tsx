@@ -1,85 +1,99 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { TAGLINE } from "./content";
 
+export const INTRO_KEY = "bb-intro";
+
+/**
+ * Brand intro, shown once per browser session.
+ *
+ * The whole timeline – wordmark rise, limit-line draw and the upward wipe that reveals the
+ * hero – runs on CSS keyframes from first paint (see `.bb-loader` in styles.css). It never
+ * waits for JavaScript, so a slow phone still hydrating is not held behind the overlay, and
+ * visitors without JS get the same experience. JS only removes the node once the wipe has
+ * finished. Returning visitors and reduced-motion visitors never see it (CSS + head script).
+ */
 export function Loader({ onDone }: { onDone: () => void }) {
   const [show, setShow] = useState(true);
-  const [isClient, setIsClient] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const done = useRef(onDone);
+  done.current = onDone;
 
   useEffect(() => {
-    setIsClient(true);
-    const t = setTimeout(() => {
+    let seen = false;
+    try {
+      seen = sessionStorage.getItem(INTRO_KEY) === "1";
+    } catch {
+      /* storage unavailable – just play the intro */
+    }
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (seen || reduce) {
       setShow(false);
-      setTimeout(onDone, 800);
-    }, 3200);
-    return () => clearTimeout(t);
-  }, [onDone]);
+      done.current();
+      return;
+    }
+
+    let cancelled = false;
+    const finish = () => {
+      if (cancelled) return;
+      try {
+        sessionStorage.setItem(INTRO_KEY, "1");
+      } catch {
+        /* ignore */
+      }
+      setShow(false);
+      done.current();
+    };
+
+    // Wait for the CSS wipe to end. A finished animation with `forwards` fill is still
+    // returned here with an already-resolved promise, so late hydration resolves at once.
+    const wipe = ref.current
+      ?.getAnimations()
+      .find((a) => (a as CSSAnimation).animationName === "bb-loader-out");
+    const fallback = window.setTimeout(finish, 3000);
+    wipe?.finished.then(finish, finish);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(fallback);
+    };
+  }, []);
+
+  if (!show) return null;
 
   return (
-    <AnimatePresence>
-      {show && (
-        <motion.div
-          className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-[#050505] overflow-hidden"
-          initial={{ opacity: 1 }}
-          exit={{ scale: 1.05, opacity: 0, filter: "blur(20px)" }}
-          transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
-        >
-          <div className="absolute inset-0 bb-grid-bg opacity-30" />
-          <div className="absolute inset-0 bb-aurora" />
+    <div
+      ref={ref}
+      className="bb-loader fixed inset-0 z-[10000] flex flex-col items-center justify-center overflow-hidden bg-[#050505]"
+      aria-hidden
+    >
+      <div className="absolute inset-0 bb-grid-bg bb-grid-fade opacity-40" />
 
-          <motion.div
-            className="absolute left-1/2 top-0 h-full w-px bb-line-glow"
-            initial={{ scaleY: 0, opacity: 0 }}
-            animate={{ scaleY: 1, opacity: 1 }}
-            transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1] }}
-            style={{ transformOrigin: "top" }}
-          />
-
-          {/* Particles */}
-          {Array.from({ length: 24 }).map((_, i) => (
-            <motion.span
-              key={i}
-              className="absolute h-1 w-1 rounded-full bg-[#c6f208]"
-              initial={{
-                x: typeof window !== "undefined" ? (Math.random() - 0.5) * window.innerWidth * 0.7 : 0,
-                y: typeof window !== "undefined" ? (Math.random() - 0.5) * window.innerHeight * 0.7 : 0,
-                opacity: 0,
-              }}
-              animate={{ opacity: [0, 0.9, 0], scale: [0, 1.5, 0] }}
-              transition={{ duration: 2.5, delay: i * 0.05, repeat: Infinity }}
-            />
-          ))}
-
-          <motion.div
-            initial={{ y: 30, opacity: 0, filter: "blur(20px)" }}
-            animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-            transition={{ duration: 1.1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="relative z-10 text-center"
-          >
-            <div className="bb-display text-[clamp(2.5rem,8vw,6rem)] tracking-tight">
-              BEYOND <span className="text-[#c6f208]">BUSINESS</span>
-            </div>
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.6, duration: 0.8 }}
-              className="bb-body mt-4 text-sm md:text-base tracking-[0.4em] uppercase"
+      <div className="relative text-center">
+        <div className="bb-display text-[clamp(2.4rem,8vw,6rem)] tracking-tight">
+          <span className="bb-mask">
+            <span className="bb-rise inline-block" style={{ animationDelay: "0.1s" }}>
+              BEYOND
+            </span>
+          </span>{" "}
+          <span className="bb-mask">
+            <span
+              className="bb-rise inline-block text-[#c6f208]"
+              style={{ animationDelay: "0.2s" }}
             >
-              Your Business, Beyond Limits.
-            </motion.div>
-          </motion.div>
+              BUSINESS
+            </span>
+          </span>
+        </div>
+        {/* Static on purpose: visible in the very first frame, so first paint has content. */}
+        <div className="bb-mono mt-5 text-[0.7rem] uppercase tracking-[0.4em] text-[#f2f2e1]/60 md:text-xs">
+          {TAGLINE}
+        </div>
+      </div>
 
-          <motion.div
-            className="absolute bottom-12 left-1/2 h-px w-[40vw] -translate-x-1/2 bg-[#c6f208]/30 overflow-hidden"
-          >
-            <motion.div
-              className="h-full w-1/3 bg-[#c6f208]"
-              initial={{ x: "-100%" }}
-              animate={{ x: "400%" }}
-              transition={{ duration: 2.4, ease: "easeInOut" }}
-            />
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+      {/* The limit line: a lime stroke that runs past its track. */}
+      <div className="absolute bottom-14 left-1/2 h-px w-[min(40vw,420px)] -translate-x-1/2 bg-[#f2f2e1]/12">
+        <div className="bb-draw-x h-full origin-left bg-[#c6f208]" />
+      </div>
+    </div>
   );
 }

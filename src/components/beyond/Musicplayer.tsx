@@ -56,9 +56,8 @@ function IdleIcon() {
       ctx.beginPath();
       for (let i = 0; i < 6; i++) {
         const a = (i / 6) * Math.PI * 2 + slowT * 2;
-        i === 0
-          ? ctx.moveTo(cx + Math.cos(a) * hexR, cy + Math.sin(a) * hexR)
-          : ctx.lineTo(cx + Math.cos(a) * hexR, cy + Math.sin(a) * hexR);
+        if (i === 0) ctx.moveTo(cx + Math.cos(a) * hexR, cy + Math.sin(a) * hexR);
+        else ctx.lineTo(cx + Math.cos(a) * hexR, cy + Math.sin(a) * hexR);
       }
       ctx.closePath();
       ctx.fillStyle = `rgba(198,242,8,${0.6 + breathe * 0.4})`;
@@ -246,7 +245,10 @@ export function MusicPlayer() {
       audio.loop = true;
       audioRef.current = audio;
 
-      const actx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const actx = new AudioCtx();
       ctxRef.current = actx;
 
       const an = actx.createAnalyser();
@@ -273,7 +275,7 @@ export function MusicPlayer() {
   );
 
   return (
-    <div className="fixed bottom-4 right-4 md:bottom-7 md:right-7 z-[9999]">
+    <div className="fixed bottom-4 right-4 md:bottom-7 md:right-7 z-[90]">
       <motion.div style={{ x: sx, y: sy }}>
         {/* Pulse rings */}
         <AnimatePresence>

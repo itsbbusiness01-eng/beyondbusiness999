@@ -1,16 +1,21 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { SubpageNav } from "@/components/beyond/SubpageNav";
 
 export const Route = createFileRoute("/cookie-policy")({
+  head: () => ({
+    meta: [
+      { title: "Cookie Policy — Beyond Business" },
+      { property: "og:title", content: "Cookie Policy — Beyond Business" },
+    ],
+  }),
   component: CookiePolicyPage,
 });
 
 function CookiePolicyPage() {
   return (
-    <div className="min-h-screen bg-[#050505] text-[#f2f2e1] font-sans pt-24 pb-32">
+    <div className="min-h-screen bg-[#050505] text-[#f2f2e1] font-sans pt-10 pb-32 sm:pt-12">
       <div className="max-w-3xl mx-auto px-6 sm:px-10">
-        <Link to="/" className="inline-block mb-12 text-sm text-white/50 hover:text-[#c6f208] transition-colors uppercase tracking-widest">
-          &larr; Back to Home
-        </Link>
+        <SubpageNav />
         <h1 className="text-4xl sm:text-5xl font-bold mb-4 bb-display">Cookie Policy</h1>
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-12">
           <div className="text-sm uppercase tracking-[0.2em] text-[#c6f208]">Beyond Business</div>

@@ -1,16 +1,22 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { SubpageNav } from "@/components/beyond/SubpageNav";
 
 export const Route = createFileRoute("/contact")({
+  head: () => ({
+    meta: [
+      { title: "Contact Us — Beyond Business" },
+      { property: "og:title", content: "Contact Us — Beyond Business" },
+      { name: "description", content: "Get in touch with the Beyond Business team." },
+    ],
+  }),
   component: ContactPage,
 });
 
 function ContactPage() {
   return (
-    <div className="min-h-screen bg-[#050505] text-[#f2f2e1] font-sans pt-24 pb-32">
+    <div className="min-h-screen bg-[#050505] text-[#f2f2e1] font-sans pt-10 pb-32 sm:pt-12">
       <div className="max-w-3xl mx-auto px-6 sm:px-10">
-        <Link to="/" className="inline-block mb-12 text-sm text-white/50 hover:text-[#c6f208] transition-colors uppercase tracking-widest">
-          &larr; Back to Home
-        </Link>
+        <SubpageNav />
         <h1 className="text-4xl sm:text-5xl font-bold mb-4 bb-display">Contact Us</h1>
         <div className="text-sm uppercase tracking-[0.2em] text-[#c6f208] mb-12">Beyond Business</div>
 

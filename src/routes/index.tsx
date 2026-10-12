@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Loader } from "../components/beyond/Loader";
 import { SmoothScroll } from "../components/beyond/SmoothScroll";
 import { Cursor } from "../components/beyond/Cursor";
@@ -12,9 +12,10 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const [loaded, setLoaded] = useState(false);
+  const onDone = useCallback(() => setLoaded(true), []);
   return (
     <>
-      <Loader onDone={() => setLoaded(true)} />
+      <Loader onDone={onDone} />
       {loaded && (
         <>
           <SmoothScroll />
