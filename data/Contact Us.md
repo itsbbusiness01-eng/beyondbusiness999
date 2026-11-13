@@ -9,7 +9,7 @@ Email
 Phone
  +91 9989134262
 Address
- Madhapur, Hyderabad, Telangana, India
+ Unit No. 712, 7th Floor, “MANJEERA TRINITY CORPORATE”, Sy. No. 1050(P), Kukatpally Village and Mandal, Medchal-Malkajgiri District, Telangana, India
 Business Hours
  Monday to Friday, 9:00 AM – 5:00 PM (IST)
 Send Us a Message

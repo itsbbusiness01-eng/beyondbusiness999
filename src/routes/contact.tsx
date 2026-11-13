@@ -44,7 +44,7 @@ function ContactPage() {
               </li>
               <li>
                 <strong className="text-white block mb-1">Address:</strong>
-                Madhapur, Hyderabad, Telangana, India
+                Unit No. 712, 7th Floor, “MANJEERA TRINITY CORPORATE”, Sy. No. 1050(P), Kukatpally Village and Mandal, Medchal-Malkajgiri District, Telangana, India
               </li>
               <li>
                 <strong className="text-white block mb-1">Business Hours:</strong>

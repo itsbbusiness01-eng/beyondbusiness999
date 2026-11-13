@@ -169,7 +169,7 @@ function PrivacyPolicyPage() {
             <ul className="space-y-2">
               <li><strong className="text-white">Email:</strong> beyondbusinessofc@gmail.com</li>
               <li><strong className="text-white">Phone:</strong> +91 9989134262</li>
-              <li><strong className="text-white">Address:</strong> Madhapur, Hyderabad, Telangana, India</li>
+              <li><strong className="text-white">Address:</strong> Unit No. 712, 7th Floor, “MANJEERA TRINITY CORPORATE”, Sy. No. 1050(P), Kukatpally Village and Mandal, Medchal-Malkajgiri District, Telangana, India</li>
             </ul>
           </section>
         </div>

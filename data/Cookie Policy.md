@@ -46,5 +46,5 @@ If you have any questions about our use of cookies, please contact us:
 Beyond Business
  Email: beyondbusinessofc@gmail.com
  Phone: +91 9989134262
- Address: Madhapur, Hyderabad, Telangana, India
+ Address: Unit No. 712, 7th Floor, “MANJEERA TRINITY CORPORATE”, Sy. No. 1050(P), Kukatpally Village and Mandal, Medchal-Malkajgiri District, Telangana, India
 
