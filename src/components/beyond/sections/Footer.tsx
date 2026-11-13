@@ -120,7 +120,15 @@ export function Footer() {
             </h2>
             <ul className="space-y-3 text-sm text-[#f2f2e1]/60">
               <li>{FOOTER.email}</li>
-              <li>{FOOTER.locations}</li>
+              <li>
+                <address className="not-italic leading-relaxed">
+                  {FOOTER.address.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </address>
+              </li>
               <li className="flex flex-wrap gap-2 pt-2">
                 {FOOTER.socials.map((s) => (
                   <a

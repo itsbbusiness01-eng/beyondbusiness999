@@ -426,7 +426,12 @@ export const FINAL_CTA = {
 export const FOOTER = {
   blurb: "An AI-powered growth studio engineering the digital infrastructure of modern founders.",
   email: "hello@beyondbusiness.studio",
-  locations: "Dubai · Bengaluru · Remote",
+  address: [
+    "Unit No. 712, 7th Floor,",
+    "“MANJEERA TRINITY CORPORATE”,",
+    "Sy. No. 1050(P), Kukatpally Village and Mandal,",
+    "Medchal-Malkajgiri District, Telangana, India",
+  ],
   /*
    * The live site links these to "#". Real profile URLs were not available in the repo,
    * so they stay as placeholders – replace `href` once the profiles are confirmed.
